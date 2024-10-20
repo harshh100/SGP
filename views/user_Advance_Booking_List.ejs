@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advance Booking List</title>
+    <link rel="stylesheet" href="css/adv_booking.css">
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    <script>
+        //loader js
+        function hideLoader() {
+            let l_b = document.getElementById('loader_bg');
+            l_b.style.display = 'none';
+        }
+        setTimeout(hideLoader, 5 * 100);
+    </script>
+</head>
+
+<body>
+    <div class="loader_bg" id="loader_bg">
+        <div class="loader"><img src="../images/cabby_logo_TRA.gif" width="100px" alt="#" /></div>
+    </div>
+    <header>
+        <div class="navcontainer">
+            <ul class="btns">
+                <li class="ul_item" class="nav-itm">
+
+                    <div class="nav-icon">
+                        <img src="../images/cabby_logo_TRA.png" width="25px" alt="">
+                        <a href="/" id="ad_booking" class="nav-itm" class="text">Home</a>
+                    </div>
+
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/account-solid.gif" width="25px" alt="">
+                        <p id="userName" class="nav-itm" class="text">
+                            <%= username %>
+                        </p>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="active">
+                        <div class="nav-icon">
+                            <img src="../images/assignment-solid.gif" width="25px" alt="">
+                            <a href="/Advance_Booking" id="ad_booking" class="nav-itm" class="text">Your
+                                Advance Booking List</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/28-info-solid.gif" width="25px" alt="">
+                        <a href="/info" id="info" class="nav-itm" class="text">Info</a>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/logout.png" width="25px" alt="">
+                        <a href="/logout" id="info" class="nav-itm" class="text">Logout</a>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="cf_con">
+        <center>
+            <h1 class="cf_head">Your Upcoming/Past Trip</h1>
+        </center>
+        <div class="cf-list_con">
+            <% for(let i=Adv_B_l.length-1;i>=0;i--){ %>
+                <% if(!Adv_B_l[i]){ %>
+                    <div id="beforeclick">
+                        <h1>empty!!</h1>
+                    </div>
+                    <% }else if(i%2==0){ %>
+                        <div class="cf-list-itm0">
+                            <div class="tripd">
+                                <div class="trip-itm">
+                                    <p>Driver Name : <span>
+                                            <%=Adv_B_l[i].sen_name%>
+                                        </span></p>
+                                </div>
+                                <div class="trip-itm">
+                                    <p>Pick-up : <span>
+                                            <%=Adv_B_l[i].from%>
+                                        </span></p>
+                                </div>
+                                <div class="trip-itm">
+                                    <p>Drop : <span>
+                                            <%=Adv_B_l[i].to%>
+                                        </span></p>
+                                </div>
+                                <div class="trip-itm time">
+                                    <p>Date : <span>
+                                            <%=Adv_B_l[i].date%> <span> / Time </span>
+                                        </span> <span>
+                                            <%=Adv_B_l[i].time%>
+                                        </span></p>
+                                </div>
+                                <div class="inlinecon">
+                                    <div class="trip-itm Passengers psg_pri-fb">
+                                        <p>Passengers : <span>
+                                                <%=Adv_B_l[i].passengers%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm Price psg_pri-fb">
+                                        <p>Price : <span>
+                                                <%=Adv_B_l[i].price%> ruppes
+                                            </span> </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }else{ %>
+                            <div class="cf-list-itm1">
+                                <div class="tripd">
+                                    <div class="trip-itm">
+                                        <p>Driver Name : <span>
+                                                <%=Adv_B_l[i].sen_name%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Pick-up : <span>
+                                                <%=Adv_B_l[i].from%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Drop : <span>
+                                                <%=Adv_B_l[i].to%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm time">
+                                        <p>Date : <span>
+                                                <%=Adv_B_l[i].date%> <span> / Time </span>
+                                            </span> <span>
+                                                <%=Adv_B_l[i].time%>
+                                            </span></p>
+                                    </div>
+                                    <div class="inlinecon">
+                                        <div class="trip-itm Passengers psg_pri-fb">
+                                            <p>Passengers : <span>
+                                                    <%=Adv_B_l[i].passengers%>
+                                                </span></p>
+                                        </div>
+                                        <div class="trip-itm Price psg_pri-fb">
+                                            <p>Price : <span>
+                                                    <%=Adv_B_l[i].price%>ruppes
+                                                </span> </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%}%>
+                                <% }%>
+        </div>
+    </div>
+</body>
+
+</html>

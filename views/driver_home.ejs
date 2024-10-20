@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>driver_home</title>
+    <!-- <meta http-equiv="refresh" content="4"> -->
+    <!-- <script src="/js/driverclient.js"></script> -->
+    <link id="u-theme-google-font" rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <link rel="stylesheet" href="css/driver_home.css">
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+
+</head>
+
+<body class="background">
+    <div class="loader_bg" id="loader_bg">
+        <div class="loader"><img src="../images/cabby_logo_TRA.gif" width="100px" alt="#" /></div>
+    </div>
+    <header>
+        <div class="navcontainer">
+            <ul class="btns">
+                <li class="ul_item" class="nav-itm">
+                    <div class="active">
+                        <div class="nav-icon">
+                            <img src="../images/cabby_logo_TRA.png" width="25px" alt="">
+                            <a href="/" id="ad_booking" class="nav-itm" class="text">Home</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/account-solid.gif" width="25px" alt="">
+                        <a href="/driver_profile" id="email" class="nav-itm" class="text">
+                            <%= username %>
+                        </a>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/assignment-solid.gif" width="25px" alt="">
+                        <a href="/Advance_Booking" id="ad_booking" class="nav-itm" class="text">Your
+                            Advance Booking List</a>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/28-info-solid.gif" width="25px" alt="">
+                        <a href="/info" id="info" class="nav-itm" class="text">Info</a>
+                    </div>
+                </li>
+                <li class="ul_item" class="nav-itm">
+                    <div class="nav-icon">
+                        <img src="../images/logout.png" width="25px" alt="">
+                        <a href="/logout" id="info" class="nav-itm" class="text">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+
+    <div class="con">
+        <div class="av_con">
+            <center>
+                <h1 class="av_head">Available User</h1>
+            </center>
+            <div class="list_con">
+                <% for(let i=av_users.length-1;i>=0;i--){ %>
+                    <% if(!av_users[i]){ %>
+                        <div class="befor">
+                            <h1>empty</h1>
+                        </div>
+                        <% }else{ %>
+                            <div class="list-itm0">
+                                <div class="tripd">
+                                    <div class="trip-itm">
+                                        <p>Pick-up : <span>
+                                                <%=av_users[i].from%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Drop : <span>
+                                                <%=av_users[i].to%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Date : <span>
+                                                <%=av_users[i].date%> <span> / Time </span>
+                                            </span> <span>
+                                                <%=av_users[i].time%>
+                                            </span></p>
+                                    </div>
+                                    <form action="/driver_req" method="post" class="p-form-con">
+                                        <div class="trip-itm psg_pri-fb">
+                                            <div class="Passengers">
+                                                <p>Passengers : <span>
+                                                        <%=av_users[i].passengers%>
+                                                    </span></p>
+                                            </div>
+                                            <div class="Price">
+                                                <p>Price : <span><input type="number" name="price" id="price"
+                                                            required></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="trip-itm">
+                                            <input type="hidden" name="d_req_with_price"
+                                                value="<%= JSON.stringify(av_users[i]) %>" />
+                                            <input type="hidden" name="driver_name" value="<%=username%>" />
+                                            <input type="submit" value="Request" id="submit" class="req-btn">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% } %>
+            </div>
+        </div>
+        <div class=" cf_con">
+
+            <center>
+                <h1 class="cf_head">confirm User</h1>
+            </center>
+            <div class="cf-list_con">
+                <% for(let i=cn_users.length-1;i>=0;i--){ %>
+                    <% if(!cn_users[i]){ %>
+                        <div class="befor">
+                            <h1>empty</h1>
+                        </div>
+                        <% }else{ %>
+                            <div class="list-itm0">
+                                <div class="tripd">
+                                    <div class="trip-itm">
+                                        <p>Name : <span>
+                                                <%=cn_users[i].rec_name%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Pick-up : <span>
+                                                <%=cn_users[i].from%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Drop : <span>
+                                                <%=cn_users[i].to%>
+                                            </span></p>
+                                    </div>
+                                    <div class="trip-itm">
+                                        <p>Date : <span>
+                                                <%=cn_users[i].date%> <span> / Time </span>
+                                            </span> <span>
+                                                <%=cn_users[i].time%>
+                                            </span></p>
+                                    </div>
+
+                                    <div class="trip-itm psg_pri-fb">
+                                        <div class="Passengers">
+                                            <p>Passengers : <span>
+                                                    <%=cn_users[i].passengers%>
+                                                </span></p>
+                                        </div>
+                                        <div class="Price">
+                                            <p>Price : <span>
+                                                    <%=cn_users[i].price%>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="trip-itm call-add">
+                                        <p class="call-add-btn call-sec">Call : <%=cn_users[i].phoneno%>
+                                        </p>
+                                        <form action="/remove_f_con_u" method="post">
+                                            <!-- <input type="hidden" name="userdata"
+                                                value="<%= JSON.stringify(cn_users[i].sen_name) %>" /> -->
+                                            <input type="hidden" name="driver_n" value="<%=cn_users[i].sen_name%>" />
+                                            <input type="hidden" name="_id" value="<%=cn_users[i]._id%>" />
+                                            <input type="submit" value="Add To Booking List" id="add_to_list"
+                                                class="call-add-btn">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% } %>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+
+        //loader js
+        function hideLoader() {
+            let l_b = document.getElementById('loader_bg');
+            l_b.style.display = 'none';
+        }
+        setTimeout(hideLoader, 5 * 100);
+    </script>
+</body>
+
+</html>
