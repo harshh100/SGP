@@ -620,6 +620,71 @@ app.post("/edit_driver_profile", function (req, res) {
   }
 });
 
+app.post("/cancelRide", function (req, res) {
+  const role = "Auto-driver";
+  const email = req.user.email;
+  const { index } = req.body;
+
+  User.findOne({ email: email }, function (err, foundUser) {
+    if (err) return res.status(500).json({ success: false, message: "Error finding user." });
+
+    const booking = foundUser.Adv_B_list[index];
+    const bookingDateTime = new Date(`${booking.date} ${booking.time}`);
+    const currentTime = new Date();
+
+    // Check if the booking is more than 2 hours from now
+    const timeDifference = (bookingDateTime - currentTime) / (1000 * 60 * 60); // in hours
+    if (timeDifference <= 2) {
+      return res.status(400).json({ success: false, message: "Cannot cancel within 2 hours of ride time." });
+    }
+
+    // Remove the booking from the list
+    foundUser.Adv_B_list.splice(index, 1);
+    foundUser.save(function (saveErr) {
+      if (saveErr) return res.status(500).json({ success: false, message: "Error saving cancellation." });
+      res.json({ success: true, message: "Ride canceled successfully." });
+    });
+  });
+});
+
+app.post("/transferRide", async function (req, res) {
+  try {
+    const { Ride_description, newDriverEmail } = req.body;
+
+    // Find the new driver by email
+    const newDriver = await User.findOne({ email: newDriverEmail });
+    if (!newDriver) {
+      return res.status(404).json({ success: false, message: "New driver not found." });
+    }
+
+    // Find the main driver (current user)
+    const mainDriver = await User.findOne({ "Adv_B_list._id": Ride_description._id });
+    if (!mainDriver) {
+      return res.status(404).json({ success: false, message: "Main driver not found." });
+    }
+
+    // Deep clone the ride to avoid reference issues
+    const rideToTransfer = JSON.parse(JSON.stringify(Ride_description));
+
+    // Add the cloned ride to the new driver's Adv_B_list
+    newDriver.Adv_B_list.push(rideToTransfer);
+
+    // Remove the ride from the main driver's Adv_B_list
+    mainDriver.Adv_B_list = mainDriver.Adv_B_list.filter(
+      (trip) => trip._id.toString() !== Ride_description._id
+    );
+
+    // Save both documents
+    await newDriver.save();
+    await mainDriver.save();
+
+    res.json({ success: true, message: "Ride transferred successfully." });
+  } catch (error) {
+    console.error("Error transferring ride:", error);
+    res.status(500).json({ success: false, message: "An error occurred during transfer." });
+  }
+});
+
 // start the server
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

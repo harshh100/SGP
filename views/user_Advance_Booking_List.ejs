@@ -8,6 +8,8 @@
     <title>Advance Booking List</title>
     <link rel="stylesheet" href="css/adv_booking.css">
     <!-- favicon -->
+    <meta http-equiv="refresh" content="5">
+
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
@@ -118,6 +120,12 @@
                                             </span> </p>
                                     </div>
                                 </div>
+                                <div class="trip-itm Cancel">
+                                    <button
+                                        onclick="cancelRide('<%= Adv_B_l[i].date %>', '<%= Adv_B_l[i].time %>', '<%= i %>')"
+                                        id="cancelButton<%= i %>">Cancel Ride</button>
+
+                                </div>
                             </div>
                         </div>
                         <% }else{ %>
@@ -157,6 +165,13 @@
                                                 </span> </p>
                                         </div>
                                     </div>
+                                    <div class="trip-itm Cancel">
+                                        <button
+                                            onclick="cancelRide('<%= Adv_B_l[i].date %>', '<%= Adv_B_l[i].time %>', '<%= i %>')"
+                                            id="cancelButton<%= i %>">Cancel Ride</button>
+
+
+                                    </div>
                                 </div>
                             </div>
                             <%}%>
@@ -164,5 +179,37 @@
         </div>
     </div>
 </body>
+<script>
+    function cancelRide(date, time, index) {
+        // Get current time and booking time
+        const bookingTime = new Date(`${date} ${time}`);
+        const currentTime = new Date();
+
+        // Check if it's within 2 hours of booking time
+        const timeDifference = (bookingTime - currentTime) / (1000 * 60 * 60);
+        if (timeDifference <= 2) {
+            alert("Cannot cancel within 2 hours of ride time.");
+            return;
+        }
+
+        fetch("/cancelRide", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ index })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`cancelButton${index}`).disabled = true;
+                    alert("Ride canceled successfully.");
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+
+    }
+</script>
+
 
 </html>

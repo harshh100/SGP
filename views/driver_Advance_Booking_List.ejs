@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advance Booking List</title>
+    <!-- <meta http-equiv="refresh" content="5"> -->
     <link id="u-theme-google-font" rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
     <link rel="stylesheet" href="css/adv_booking.css">
@@ -79,100 +80,95 @@
             <h1 class="cf_head">Your Upcoming/Past Trip</h1>
         </center>
         <div class="cf-list_con">
-            <% for(let i=Adv_B_l.length-1;i>=0;i--){ %>
+            <% for(let i=Adv_B_l.length-1; i>=0; i--){ %>
                 <% if(!Adv_B_l[i]){ %>
                     <div id="beforeclick">
                         <h1>empty!!</h1>
                     </div>
-                    <% }else if(i%2==0){ %>
-                        <div class="cf-list-itm0">
+                    <% } else { %>
+                        <div class="cf-list-itm<%= i % 2 === 0 ? '0' : '1' %>">
                             <div class="tripd">
+                                <!-- Trip Details -->
                                 <div class="trip-itm">
-                                    <p>Student Name : <span>
-                                            <%=Adv_B_l[i].rec_name%>
+                                    <p>Student Name: <span>
+                                            <%= Adv_B_l[i].rec_name %>
                                         </span></p>
                                 </div>
                                 <div class="trip-itm">
-                                    <p>Phone Number : <span>
-                                            <%=Adv_B_l[i].phoneno%>
+                                    <p>Phone Number: <span>
+                                            <%= Adv_B_l[i].phoneno %>
                                         </span></p>
                                 </div>
                                 <div class="trip-itm">
-                                    <p>Pick-up : <span>
-                                            <%=Adv_B_l[i].from%>
+                                    <p>Pick-up: <span>
+                                            <%= Adv_B_l[i].from %>
                                         </span></p>
                                 </div>
                                 <div class="trip-itm">
-                                    <p>Drop : <span>
-                                            <%=Adv_B_l[i].to%>
+                                    <p>Drop: <span>
+                                            <%= Adv_B_l[i].to %>
                                         </span></p>
                                 </div>
                                 <div class="trip-itm time">
-                                    <p>Date : <span>
-                                            <%=Adv_B_l[i].date%> <span> / Time </span>
-                                        </span> <span>
-                                            <%=Adv_B_l[i].time%>
+                                    <p>Date: <span>
+                                            <%= Adv_B_l[i].date %> / Time: <%= Adv_B_l[i].time %>
                                         </span></p>
                                 </div>
                                 <div class="inlinecon">
                                     <div class="trip-itm Passengers psg_pri-fb">
-                                        <p>Passengers : <span>
-                                                <%=Adv_B_l[i].passengers%>
+                                        <p>Passengers: <span>
+                                                <%= Adv_B_l[i].passengers %>
                                             </span></p>
                                     </div>
                                     <div class="trip-itm Price psg_pri-fb">
-                                        <p>Price : <span>
-                                                <%=Adv_B_l[i].price%> ruppes
-                                            </span> </p>
+                                        <p>Price: <span>
+                                                <%= Adv_B_l[i].price %> rupees
+                                            </span></p>
                                     </div>
+                                </div>
+
+                                <!-- Transfer Form -->
+                                <div class="transfer-form">
+                                    <input type="email" placeholder="New Driver Email" id="newDriverEmail<%= i %>">
+                                    <button onclick="transferRide('<%= JSON.stringify(Adv_B_l[i]) %>', '<%= i %>')"
+                                        id="transferButton<%= i %>">Transfer Ride</button>
+
                                 </div>
                             </div>
                         </div>
-                        <% }else{ %>
-                            <div class="cf-list-itm1">
-                                <div class="tripd">
-                                    <div class="trip-itm">
-                                        <p>Student Name : <span>
-                                                <%=Adv_B_l[i].rec_name%>
-                                            </span></p>
-                                    </div>
-                                    <div class="trip-itm">
-                                        <p>Pick-up : <span>
-                                                <%=Adv_B_l[i].from%>
-                                            </span></p>
-                                    </div>
-                                    <div class="trip-itm">
-                                        <p>Drop : <span>
-                                                <%=Adv_B_l[i].to%>
-                                            </span></p>
-                                    </div>
-                                    <div class="trip-itm time">
-                                        <p>Date : <span>
-                                                <%=Adv_B_l[i].date%> <span> / Time </span>
-                                            </span> <span>
-                                                <%=Adv_B_l[i].time%>
-                                            </span></p>
-                                    </div>
-                                    <div class="inlinecon">
-                                        <div class="trip-itm Passengers psg_pri-fb">
-                                            <p>Passengers : <span>
-                                                    <%=Adv_B_l[i].passengers%>
-                                                </span></p>
-                                        </div>
-                                        <div class="trip-itm Price psg_pri-fb">
-                                            <p>Price : <span>
-                                                    <%=Adv_B_l[i].price%>ruppes
-                                                </span> </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <%}%>
-                                <% }%>
-
-
+                        <% } %>
+                            <% } %>
         </div>
     </div>
 </body>
+<script>
+    function transferRide(Ride_description, index) {
+        const newDriverEmail = document.getElementById(`newDriverEmail${index}`).value;
+        if (!newDriverEmail) {
+            alert("Please enter the email of the new driver.");
+            return;
+        }
+
+        // Parse the JSON string to get the object
+        const rideObj = JSON.parse(Ride_description);
+
+        fetch("/transferRide", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Ride_description: rideObj, newDriverEmail })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`transferButton${index}`).disabled = true;
+                    alert("Ride transferred successfully.");
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
+
+</script>
 
 </html>
