@@ -177,3 +177,48 @@
             margin-left: 90px;
         }
    
+        .Cancel button {
+            padding: 10px 15px;
+            margin: 5px 0px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid black;
+            color: white;
+            background-color: black;
+            border-radius: 7px;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 0;
+            width: 100%;
+        }
+        
+        .Cancel button:hover {
+            background-color: #8a8b8e; 
+        }
+        
+        .Cancel button:active {
+            background-color: #8a8b8e; 
+        }
+
+        .Remove button {
+            padding: 10px 15px;
+            margin: 5px 0px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid black;
+            color: white;
+            background-color: black;
+            border-radius: 7px;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 0;
+            width: 100%;
+        }
+        
+        .Remove button:hover {
+            background-color: #8a8b8e; 
+        }
+        
+        .Remove button:active {
+            background-color: #8a8b8e; 
+        }

@@ -8,7 +8,7 @@
     <title>Advance Booking List</title>
     <link rel="stylesheet" href="css/adv_booking.css">
     <!-- favicon -->
-    <meta http-equiv="refresh" content="5">
+    <!-- <meta http-equiv="refresh" content="5"> -->
 
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
@@ -84,6 +84,7 @@
                         <h1>empty!!</h1>
                     </div>
                     <% }else if(i%2==0){ %>
+
                         <div class="cf-list-itm0">
                             <div class="tripd">
                                 <div class="trip-itm">
@@ -123,8 +124,18 @@
                                 <div class="trip-itm Cancel">
                                     <button
                                         onclick="cancelRide('<%= Adv_B_l[i].date %>', '<%= Adv_B_l[i].time %>', '<%= i %>')"
-                                        id="cancelButton<%= i %>">Cancel Ride</button>
+                                        id="cancelButton<%= i %>" class="cancel-btn" data-date="<%= Adv_B_l[i].date %>"
+                                        data-time="<%= Adv_B_l[i].time %>">
+                                        Cancel Ride
+                                    </button>
 
+                                </div>
+                                <div class="trip-itm Remove">
+                                    <button onclick="RemoveRide('<%= i %>')" id="RemoveButton<%= i %>"
+                                        class="Remove-btn" data-date="<%= Adv_B_l[i].date %>"
+                                        data-time="<%= Adv_B_l[i].time %>">
+                                        Remove Ride
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -168,9 +179,17 @@
                                     <div class="trip-itm Cancel">
                                         <button
                                             onclick="cancelRide('<%= Adv_B_l[i].date %>', '<%= Adv_B_l[i].time %>', '<%= i %>')"
-                                            id="cancelButton<%= i %>">Cancel Ride</button>
-
-
+                                            id="cancelButton<%= i %>" class="cancel-btn"
+                                            data-date="<%= Adv_B_l[i].date %>" data-time="<%= Adv_B_l[i].time %>">
+                                            Cancel Ride
+                                        </button>
+                                    </div>
+                                    <div class="trip-itm Remove">
+                                        <button onclick="RemoveRide('<%= i %>')" id="RemoveButton<%= i %>"
+                                            class="Remove-btn" data-date="<%= Adv_B_l[i].date %>"
+                                            data-time="<%= Adv_B_l[i].time %>">
+                                            Remove Ride
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -202,6 +221,7 @@
                 if (data.success) {
                     document.getElementById(`cancelButton${index}`).disabled = true;
                     alert("Ride canceled successfully.");
+                    window.location.reload();
                 } else {
                     alert(data.message);
                 }
@@ -209,6 +229,54 @@
             .catch(error => console.error("Error:", error));
 
     }
+
+    function RemoveRide(index) {
+        fetch("/removeRide", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ index })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`RemoveButton${index}`).disabled = true;
+                    alert("Ride removed successfully.");
+                    window.location.reload();
+                    // Optionally, remove the trip item from the DOM
+                    document.getElementById(`trip${index}`).style.display = "none";
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
+
+
+    document.querySelectorAll('.cancel-btn').forEach(button => {
+        const date = button.getAttribute('data-date');
+        const time = button.getAttribute('data-time');
+        const bookingTime = new Date(`${date} ${time}`);
+        const currentTime = new Date();
+        const timeDifference = (bookingTime - currentTime) / (1000 * 60 * 60);
+
+        if (timeDifference <= 2) {
+            button.style.display = 'none';
+        }
+    });
+
+    document.querySelectorAll('.Remove-btn').forEach((button, index) => {
+        const date = button.getAttribute('data-date');
+        const time = button.getAttribute('data-time');
+        const bookingTime = new Date(`${date} ${time}`);
+        const currentTime = new Date();
+
+        // Hide button if the trip date/time is in the future
+        if (bookingTime > currentTime) {
+            button.style.display = 'none';
+        } else {
+            button.onclick = () => RemoveRide(index);
+        }
+    });
 </script>
 
 

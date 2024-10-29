@@ -685,6 +685,39 @@ app.post("/transferRide", async function (req, res) {
   }
 });
 
+app.post("/removeRide", async (req, res) => {
+  const { index } = req.body;
+  const userEmail = req.user.email;
+  if (index === undefined || !userEmail) {
+    return res.status(400).json({ success: false, message: "Invalid data" });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email: userEmail });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Check if the index is valid
+    if (index < 0 || index >= user.Adv_B_list.length) {
+      return res.status(400).json({ success: false, message: "Invalid entry index" });
+    }
+
+    // Remove the specific trip entry from Adv_B_list
+    user.Adv_B_list.splice(index, 1);
+
+    // Save updated user document
+    await user.save();
+
+    res.json({ success: true, message: "Ride removed successfully" });
+  } catch (error) {
+    console.error("Error removing ride:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // start the server
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

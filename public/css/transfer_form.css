@@ -1,0 +1,37 @@
+.transfer-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+
+}
+
+.transfer-form input[type="email"] {
+    padding: 10px;
+    border: 1px solid #D1D5DB; /* Light gray border */
+    border-radius: 5px;
+    background-color: #F3F4F6; /* Very light gray background */
+    color: #111827; /* Dark gray text */
+}
+
+.transfer-form button {
+    padding: 10px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 2px solid black;
+    color: white;
+    background-color: black;
+    border-radius: 7px;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    width: 100%;
+}
+
+.transfer-form button:hover {
+    background-color: #8a8b8e; /* Darker blue on hover */
+}
+
+.transfer-form button:active {
+    background-color: #8a8b8e; /* Even darker blue when clicked */
+}
