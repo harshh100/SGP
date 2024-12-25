@@ -651,11 +651,16 @@ app.post("/transferRide", async function (req, res) {
   try {
     const { Ride_description, newDriverEmail } = req.body;
 
+    // console.log("Ride_description : " + Ride_description);
+
     // Find the new driver by email
     const newDriver = await User.findOne({ email: newDriverEmail });
     if (!newDriver) {
       return res.status(404).json({ success: false, message: "New driver not found." });
     }
+
+    // console.log("Find the new driver by email : "+newDriver);
+
 
     // Find the main driver (current user)
     const mainDriver = await User.findOne({ "Adv_B_list._id": Ride_description._id });
@@ -663,20 +668,32 @@ app.post("/transferRide", async function (req, res) {
       return res.status(404).json({ success: false, message: "Main driver not found." });
     }
 
+    // console.log("Find the main driver (current user) : "+mainDriver);
+
+
     // Deep clone the ride to avoid reference issues
     const rideToTransfer = JSON.parse(JSON.stringify(Ride_description));
+    // console.log("rideToTransfer : " + rideToTransfer);
 
     // Add the cloned ride to the new driver's Adv_B_list
     newDriver.Adv_B_list.push(rideToTransfer);
+    // console.log("Add the cloned ride to the new driver's Adv_B_list");
+
 
     // Remove the ride from the main driver's Adv_B_list
     mainDriver.Adv_B_list = mainDriver.Adv_B_list.filter(
       (trip) => trip._id.toString() !== Ride_description._id
     );
 
+    // console.log("Remove the ride from the main driver's Adv_B_list");
+
+
     // Save both documents
     await newDriver.save();
+    // console.log("Save newdriver documents");
     await mainDriver.save();
+    // console.log("Save maindriver documents");
+
 
     res.json({ success: true, message: "Ride transferred successfully." });
   } catch (error) {
